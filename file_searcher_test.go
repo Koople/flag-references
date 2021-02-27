@@ -15,9 +15,9 @@ func Test_find_flags_in_directory(t *testing.T) {
 
 	var projectPath = dir + "/example"
 
-	founds, errorMessage := FileSearcher(projectPath, "someFlag")
+	founds, errorMessage := FileSearcher(projectPath, "someFlag", 2)
 
-	if errorMessage == 1 {
+	if errorMessage != nil {
 		t.Fail()
 	}
 
@@ -56,11 +56,11 @@ func Test_non_existing_flags(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var projectPath = dir + "/../example"
+	var projectPath = dir + "/example"
 
-	founds, errorMessage := FileSearcher(projectPath, "nonExistingFlag")
+	founds, errorMessage := FileSearcher(projectPath, "nonExistingFlag", 3)
 
-	if errorMessage == 1 {
+	if errorMessage != nil {
 		t.Fail()
 	}
 
@@ -74,11 +74,11 @@ func Test_non_existing_directory(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	var projectPath = dir + "/../nonExisting"
+	var projectPath = dir + "/nonExisting"
 
-	_, errorCode := FileSearcher(projectPath, "someFlag")
+	_, errorCode := FileSearcher(projectPath, "someFlag", 3)
 
-	assert.Equal(t, errorCode, 1)
+	assert.Equal(t, errorCode.Error(), "project path does not exist")
 }
 
 func Test_split_line_into_a_code(t *testing.T) {

@@ -3,6 +3,7 @@ package flags_searcher
 import (
 	"bytes"
 	"github.com/monochromegane/the_platinum_searcher"
+	"github.com/pkg/errors"
 	"os"
 	"regexp"
 	"sort"
@@ -24,20 +25,24 @@ type File struct {
 	Chunks   []Chunk `json:"chunks"`
 }
 
-func FileSearcher(projectPath string, flag string) ([]File, int) {
+func FileSearcher(projectPath string, flag string, lineContext int) ([]File, error) {
+	if lineContext <= 0 {
+		lineContext = 5
+	}
+
 	if _, err := os.Stat(projectPath); os.IsNotExist(err) {
-		return nil, 1
+		return nil, errors.New("project path does not exist")
 	}
 
 	buf := new(bytes.Buffer)
 	errBuf := new(bytes.Buffer)
 	pt := the_platinum_searcher.PlatinumSearcher{Out: buf, Err: errBuf}
 	pattern := "[\\\"\\'\\`]" + flag + "[\\\"\\'\\`]"
-	exitCode := pt.Run([]string{"--nocolor", "--nogroup", "-e", "-C5", pattern, projectPath})
+	exitCode := pt.Run([]string{"--nocolor", "--nogroup", "-e", "-C" + strconv.Itoa(lineContext), pattern, projectPath})
 	result := buf.String()
 	err := errBuf.String()
 	if err != "" || exitCode == 1 {
-		return nil, 1
+		return nil, errors.New(err)
 	}
 	results := strings.Split(result, "\n")
 	founds := make([]File, 0)
@@ -62,7 +67,7 @@ func FileSearcher(projectPath string, flag string) ([]File, int) {
 		})
 	}
 
-	return founds, 0
+	return founds, nil
 }
 
 func NewLineCode(line string) LineCode {

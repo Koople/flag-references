@@ -11,9 +11,10 @@ require (
 	github.com/monochromegane/go-home v0.0.0-20151024104835-25d9dda59392 // indirect
 	github.com/monochromegane/terminal v0.0.0-20161222050454-9bc47e2707d9 // indirect
 	github.com/monochromegane/the_platinum_searcher v2.2.0+incompatible
+	github.com/pkg/errors v0.9.1
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
+	github.com/sirupsen/logrus v1.8.0
 	github.com/stretchr/testify v1.2.2
-	github.com/tidwall/pretty v1.0.5 // indirect
 	golang.org/x/text v0.3.5 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

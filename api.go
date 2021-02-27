@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	rhttp "github.com/hashicorp/go-retryablehttp"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -38,14 +39,14 @@ func (client KPLApi) GetListFlags() ([]string, error) {
 	flagsPath := "/proxy/server/flags"
 	request, err := rhttp.NewRequest("GET", fmt.Sprintf("%s%s", client.options.BaseUri, flagsPath), nil)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "Error creating request GetFlags")
 	}
 	request.Header.Set("x-api-key", client.options.ApiKey)
 	request.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.httpClient.Do(request)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "Error doing the request GetFlags")
 	}
 
 	defer resp.Body.Close()
@@ -55,23 +56,25 @@ func (client KPLApi) GetListFlags() ([]string, error) {
 	return flags, err
 }
 
-func (client KPLApi) SaveFlagsInformation(founds []FlagFound) int {
+func (client KPLApi) SaveFlagsInformation(founds []FlagFound) error {
 	flagsPath := "/proxy/server/flags"
 	jsonValue, err := json.Marshal(founds)
 	if err != nil {
-		return 1
+		return errors.Wrap(err, "Error marshaling founds list")
 	}
+
 	request, err := rhttp.NewRequest("PUT", fmt.Sprintf("%s%s", client.options.BaseUri, flagsPath), bytes.NewReader(jsonValue))
 	if err != nil {
-		return 1
+		return errors.Wrap(err, "Error creating request UpdateCodeReferences")
 	}
+
 	request.Header.Set("x-api-key", client.options.ApiKey)
 	request.Header.Set("Content-Type", "application/json")
 
 	_, err = client.httpClient.Do(request)
 	if err != nil {
-		return 1
+		return errors.Wrap(err, "Error doing the request UpdateCodeReferences")
 	}
 
-	return 0
+	return nil
 }
