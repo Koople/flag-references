@@ -12,7 +12,7 @@ type FlagFound struct {
 
 func Run(projectPath string, apiKey string) error {
 	env, exists := os.LookupEnv("API_URL")
-	baseUri := "https://sdk.koople.io/"
+	baseUri := "https://sdk.koople.io"
 	if exists {
 		baseUri = env
 	}

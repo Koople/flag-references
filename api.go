@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	BaseUri = "https://sdk.koople.io/"
+	BaseUri = "https://sdk.koople.io"
 )
 
 type KPLApi struct {

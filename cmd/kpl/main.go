@@ -8,8 +8,13 @@ import (
 )
 
 func main() {
-	projectPath := os.Args[2]
-	apiKey := os.Args[1]
+	apiKey, exists := os.LookupEnv("API_KEY")
+	if !exists {
+		panic("api key is mandatory")
+	}
+
+	projectPath := os.Args[1]
+
 	err := fs.Run(projectPath, apiKey)
 	if err != nil {
 		log.Error(err)
