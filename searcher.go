@@ -2,7 +2,6 @@ package flags_searcher
 
 import (
 	"github.com/pkg/errors"
-	"os"
 )
 
 type FlagFound struct {
@@ -10,14 +9,14 @@ type FlagFound struct {
 	Founds []File `json:"founds"`
 }
 
-func Run(projectPath string, apiKey string) error {
-	env, exists := os.LookupEnv("API_URL")
-	baseUri := "https://sdk.koople.io"
-	if exists {
-		baseUri = env
-	}
+type RepositoryReferences struct {
+	Repository string      `json:"repository"`
+	Branch     string      `json:"branch"`
+	References []FlagFound `json:"references"`
+}
 
-	options := KPLOptions{BaseUri: baseUri, ApiKey: apiKey}
+func Run(repository string, projectPath string, apiKey string) error {
+	options := KPLOptions{ApiKey: apiKey}
 	client := NewClient(options)
 
 	flags, err := client.GetListFlags()
@@ -40,5 +39,21 @@ func Run(projectPath string, apiKey string) error {
 		})
 	}
 
-	return client.SaveFlagsInformation(founds)
+	gitClient, err := NewGitClient(projectPath)
+	if err != nil {
+		return err
+	}
+
+	branch, err := gitClient.CurrentBranch()
+	if err != nil {
+		return err
+	}
+
+	references := RepositoryReferences{
+		Repository: repository,
+		Branch:     branch,
+		References: founds,
+	}
+
+	return client.SaveFlagsInformation(references)
 }

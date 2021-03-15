@@ -14,8 +14,9 @@ func main() {
 	}
 
 	projectPath := os.Args[1]
+	repository := os.Args[2]
 
-	err := fs.Run(projectPath, apiKey)
+	err := fs.Run(repository, projectPath, apiKey)
 	if err != nil {
 		log.Error(err)
 	}

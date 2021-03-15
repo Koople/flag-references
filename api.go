@@ -6,6 +6,7 @@ import (
 	"fmt"
 	rhttp "github.com/hashicorp/go-retryablehttp"
 	"github.com/pkg/errors"
+	"os"
 )
 
 const (
@@ -25,6 +26,11 @@ type KPLOptions struct {
 func NewClient(opts KPLOptions) KPLApi {
 	if opts.BaseUri == "" {
 		opts.BaseUri = BaseUri
+	}
+
+	env, exists := os.LookupEnv("API_URL")
+	if exists {
+		opts.BaseUri = env
 	}
 
 	httpClient := rhttp.NewClient()
@@ -56,7 +62,7 @@ func (client KPLApi) GetListFlags() ([]string, error) {
 	return flags, err
 }
 
-func (client KPLApi) SaveFlagsInformation(founds []FlagFound) error {
+func (client KPLApi) SaveFlagsInformation(founds RepositoryReferences) error {
 	flagsPath := "/proxy/server/flags"
 	jsonValue, err := json.Marshal(founds)
 	if err != nil {
