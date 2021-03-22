@@ -3,6 +3,7 @@ package application
 import (
 	"github.com/koople/flag-references/src/api"
 	"github.com/koople/flag-references/src/git"
+	"github.com/koople/flag-references/src/log"
 	"github.com/koople/flag-references/src/searcher"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -22,6 +23,11 @@ func Run(repository string, projectPath string, apiKey string, baseUri string, l
 	}
 
 	founds := make([]api.FlagFound, 0)
+
+	log.ClientLog.WithFields(logrus.Fields{
+		"projectPath": projectPath,
+		"flags":       flags,
+	}).Debug()
 
 	for _, flag := range flags {
 		flagFounds, err := searcher.FileSearcher(projectPath, flag, 5)
