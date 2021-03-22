@@ -1,4 +1,4 @@
-package flags_searcher
+package api
 
 import (
 	"fmt"

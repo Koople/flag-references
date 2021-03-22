@@ -1,4 +1,4 @@
-package flags_searcher
+package searcher
 
 import (
 	"bytes"

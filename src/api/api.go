@@ -1,11 +1,13 @@
-package flags_searcher
+package api
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	rhttp "github.com/hashicorp/go-retryablehttp"
+	"github.com/koople/flag-references/src/searcher"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"os"
 )
 
@@ -21,9 +23,25 @@ type KPLApi struct {
 type KPLOptions struct {
 	BaseUri string
 	ApiKey  string
+	Logger  *logrus.Logger
+}
+
+type FlagFound struct {
+	Flag   string          `json:"flag"`
+	Founds []searcher.File `json:"founds"`
+}
+
+type RepositoryReferences struct {
+	Repository string      `json:"repository"`
+	Branch     string      `json:"branch"`
+	References []FlagFound `json:"references"`
 }
 
 func NewClient(opts KPLOptions) KPLApi {
+	if opts.Logger == nil {
+		opts.Logger = logrus.New()
+	}
+
 	if opts.BaseUri == "" {
 		opts.BaseUri = BaseUri
 	}
@@ -34,6 +52,7 @@ func NewClient(opts KPLOptions) KPLApi {
 	}
 
 	httpClient := rhttp.NewClient()
+	httpClient.Logger = opts.Logger
 
 	return KPLApi{
 		httpClient: httpClient,

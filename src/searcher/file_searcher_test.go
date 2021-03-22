@@ -1,4 +1,4 @@
-package flags_searcher
+package searcher
 
 import (
 	"github.com/stretchr/testify/assert"

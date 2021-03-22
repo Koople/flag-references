@@ -1,9 +1,8 @@
-module flags-searcher
+module github.com/koople/flag-references
 
 go 1.15
 
 require (
-	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.2.0
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/monochromegane/conflag v0.0.0-20151130130520-6d68c9aa4183 // indirect
@@ -14,7 +13,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
 	github.com/sirupsen/logrus v1.8.0
+	github.com/spf13/cobra v1.1.3
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/text v0.3.5 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

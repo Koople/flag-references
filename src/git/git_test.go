@@ -1,4 +1,4 @@
-package flags_searcher
+package git
 
 import (
 	"github.com/go-git/go-git/v5"
@@ -27,4 +27,5 @@ func TestGetCurrentBranchName(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, branch, "main")
+	require.NoError(t, os.RemoveAll(directory))
 }
