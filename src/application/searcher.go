@@ -9,7 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Run(repository string, projectPath string, apiKey string, baseUri string, logger *logrus.Logger) error {
+func Run(repository string, projectPath string, apiKey string, baseUri string, branchName string, logger *logrus.Logger) error {
 	options := api.KPLOptions{
 		BaseUri: baseUri,
 		ApiKey:  apiKey,
@@ -47,9 +47,12 @@ func Run(repository string, projectPath string, apiKey string, baseUri string, l
 		return err
 	}
 
-	branch, err := gitClient.CurrentBranch()
-	if err != nil {
-		return err
+	branch := branchName
+	if branch == "" {
+		branch, err = gitClient.CurrentBranch()
+		if err != nil {
+			return err
+		}
 	}
 
 	references := api.RepositoryReferences{

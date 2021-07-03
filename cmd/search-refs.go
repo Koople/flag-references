@@ -12,6 +12,7 @@ var apiKey string
 var projectPath string
 var baseUri string
 var repository string
+var branchName string
 var v string
 
 func main() {
@@ -30,6 +31,7 @@ func main() {
 	}
 
 	rootCmd.PersistentFlags().StringVarP(&projectPath, "projectPath", "p", ".", "Project path.")
+	rootCmd.PersistentFlags().StringVarP(&branchName, "branch", "b", "", "Branch name.")
 	rootCmd.PersistentFlags().StringVar(&baseUri, "baseUri", "https://sdk.koople.io", "Base uri.")
 	rootCmd.PersistentFlags().StringVarP(&v, "verbosity", "v", logrus.WarnLevel.String(), "Log level (debug, info, warn, error, fatal, panic).")
 
@@ -49,7 +51,7 @@ var searchReferencesCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		err := application.Run(repository, projectPath, apiKey, baseUri, log.ClientLog)
+		err := application.Run(repository, projectPath, apiKey, baseUri, branchName, log.ClientLog)
 		if err != nil {
 			log.ClientLog.Error(err)
 		}
